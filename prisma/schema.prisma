@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRoles {
+  ADMIN
+  USER
+  GUEST
+}
+
+enum QuestionnaireStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVE
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email String  @unique
+  username String
+  password String
+  role UserRoles @default(GUEST)
+
+  refreshToken String?
+  ownQuestionnaires Questionnaire[]
+  assignedQuestionnaires AssignQuestionnairesUsers[] @relation("assinged_user")
+  assignerQuestionnaires AssignQuestionnairesUsers[] @relation("assigner_user")
+
+  @@map("users")
+}
+
+model Questionnaire {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title String
+  link String
+  status QuestionnaireStatus @default(DRAFT)
+  company String?
+
+  createdBy Int
+  author User @relation(fields: [createdBy], references: [id])
+  assignQuestionnaires AssignQuestionnairesUsers[]
+}
+
+model AssignQuestionnairesUsers {
+  assigned User  @relation(fields: [assignedId], references: [id], name: "assinged_user")
+  assignedId Int
+  assignerBy User @relation(fields: [assignerId], references: [id], name: "assigner_user")
+  assignerId Int
+  questionnaire Questionnaire @relation(fields: [questionnaireId], references: [id])
+  questionnaireId Int
+  assignedAt DateTime @default(now())
+
+   @@id([assignedId, questionnaireId])
+}

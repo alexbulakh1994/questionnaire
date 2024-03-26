@@ -1,0 +1,15 @@
+app:
+  port: ${APP_PORT}
+  auth:
+    expired:
+      access_token: 1800
+      refresh_token: 604800
+    secret:
+      access_token: 'SECRET_KEY'
+      refresh_token: 'REFRESH_SECRET_KEY'
+db:
+  port: ${PG_DB_PORT}
+  host: ${PG_DB_HOST}
+  name: ${PG_DB_NAME}
+  user: ${PG_DB_USER}
+  password: ${PG_DB_PASSWORD}
