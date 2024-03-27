@@ -49,7 +49,7 @@ export class AuthService {
             throw new InternalServerErrorException('Service cause error');
           }
         }
-        throw err; // need to check
+        throw err; //TODO need throw custom application error
       }
     });
   }
@@ -74,7 +74,7 @@ export class AuthService {
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           throw new InternalServerErrorException('Service cause error');
         }
-        throw err;
+        throw err; //TODO need throw custom application error
       }
     });
   }
@@ -85,6 +85,8 @@ export class AuthService {
         const user = await this.userService.getByUserId(userId, tx);
 
         if (!user) throw new NotFoundException('User not found');
+        if (!user.refreshToken)
+          throw new UnauthorizedException('User already logout from app');
 
         const isTokenMatch = await bcrypt.compare(
           refreshToken,
@@ -101,7 +103,7 @@ export class AuthService {
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           throw new InternalServerErrorException('Service cause error');
         }
-        throw err;
+        throw err; //TODO need throw custom application error
       }
     });
   }
@@ -121,9 +123,11 @@ export class AuthService {
       );
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        throw new InternalServerErrorException('Service cause error');
+        throw new InternalServerErrorException(
+          'Service cause error, try later',
+        );
       }
-      throw err;
+      throw err; //TODO need throw custom application error
     }
   }
 
@@ -141,8 +145,8 @@ export class AuthService {
           role,
         },
         {
-          secret: acSecret, //TODO: generate real secret key and add it to enc variables
-          expiresIn: acExpired, //TODO: change on env variable from config add to config
+          secret: acSecret,
+          expiresIn: acExpired,
         },
       ),
       this.jwtService.signAsync(
