@@ -26,6 +26,4 @@ export class UserController {
     const { userId, role } = dto;
     return this.userService.updateRole(adminId, userId, role);
   }
-
-  //getQuestionnaires() {} //for admin and user
 }

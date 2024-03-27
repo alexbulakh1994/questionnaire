@@ -66,7 +66,7 @@ export class QuestionnaireController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateQuestionnaireDto: UpdateQuestionnaireDto,
   ) {
-    return this.questionnaireService.update(id, updateQuestionnaireDto, user); //check how it works if id not exist ...
+    return this.questionnaireService.update(id, updateQuestionnaireDto, user);
   }
 
   @Post(':id/assign/:userId')

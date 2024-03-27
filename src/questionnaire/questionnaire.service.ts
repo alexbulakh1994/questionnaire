@@ -19,6 +19,7 @@ import {
   DEFAULT_LIMIT,
   DEFAULT_OFFSET,
 } from '../common/constants/pagination.constant';
+import { statusTransitionMap } from '../common/constants/status.transition.map';
 import { CreateQuestionnaireDto } from './dto/create-questionnaire.dto';
 import { SearchQuestionnaireDto } from './dto/search-questionnaire.dto';
 import { UpdateQuestionnaireDto } from './dto/update-questionnaire.dto';
@@ -141,13 +142,15 @@ export class QuestionnaireService {
 
       if (
         updateQuestionnaireDto.status &&
-        this.validateStatusTransition(
+        !this.validateStatusTransition(
           questionnaire.status,
           updateQuestionnaireDto.status,
         )
       ) {
         throw new ConflictException(
-          `Questionnaire with id: ${id} could not update status to ${updateQuestionnaireDto.status}. Allowed status are: ...`, //TODO
+          `Questionnaire with id: ${id} could not update status to ${
+            updateQuestionnaireDto.status
+          }. Allowed status are: ${statusTransitionMap[questionnaire.status]}`, //TODO
         );
       }
 
@@ -167,16 +170,6 @@ export class QuestionnaireService {
     prevStatus: QuestionnaireStatus,
     nextStatus: QuestionnaireStatus,
   ) {
-    const statusTransitionMap = {
-      //TODO: move map to shared type
-      [QuestionnaireStatus.DRAFT]: [
-        QuestionnaireStatus.ACTIVE,
-        QuestionnaireStatus.ARCHIVE,
-      ],
-      [QuestionnaireStatus.ACTIVE]: [QuestionnaireStatus.DRAFT],
-      [QuestionnaireStatus.ARCHIVE]: [],
-    };
-
     return (
       prevStatus === nextStatus ||
       statusTransitionMap[prevStatus].includes(nextStatus)

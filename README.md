@@ -16,6 +16,8 @@ ADMIN could additionally update any questionnaire and see all of questionnaire (
 
 ## Running the app
 App starts in docker containers using docker compose
+.env file already created, but for real project need only .env.example as already added in docker folder
+
 Go to docker folder and run command
 ```bash
 docker compose up
