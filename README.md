@@ -1,6 +1,6 @@
 ## Description - edited test
 
-This app include next modules: auth, user,questionnaire
+This app include next nest modules: auth, user,questionnaire
 
 Auth module: sign-in, sign-up, logout and refresh token endpoint and logic connected with this
 
