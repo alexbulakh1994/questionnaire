@@ -1,6 +1,8 @@
 {
   "name": "questionnaire app",
   "version": "0.0.1",
+  "name": "auth_app",
+  "version": "2.0.0",
   "description": "",
   "author": "",
   "private": true,
