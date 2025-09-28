@@ -24,7 +24,7 @@
     "prisma:migrate": "prisma migrate deploy"
   },
   "dependencies": {
-    "@nestjs/common": "^9.0.0",
+    "@nestjs/common": "^11.1.6",
     "@nestjs/config": "^3.2.1",
     "@nestjs/core": "^9.0.0",
     "@nestjs/jwt": "^10.2.0",
